@@ -81,7 +81,31 @@ void loadFiles(void) {
 
 
 int mainmenu(void) {
-
+	int menunum;
+	
+	printf("***MAIN MENU***\n\n");
+	printf("<1> Select User\n");
+	printf("<2> Stastics\n");
+	printf("<3> View User Records\n");
+	printf("<4> About\n");
+	printf("<5> Quit\n");
+	printf("Enter the choice : ");
+	
+	scanf("%d", &menunum);
+	
+	switch (menunum){
+		case 1 : userSelectMenu();
+			break;
+		case 2 :
+			break;
+		case 3 :
+			break;
+		case 4:
+			break;
+		case 5 : 
+			break;
+	}
+	
 }
 
 int listUser(void) {

@@ -25,11 +25,11 @@ FILE* userlist;	/*user list file*/
 int nusers; /*user number*/
 FILE* fllist;	/*lesson list file*/
 FILE* fuser;	/*current user data file*/
-//lesson cl;	/*current lesson*/
+lesson cl;	/*current lesson*/
 user cu;	/*current user*/
 
 
-//íŒŒì¼ì— ëª‡ê°œì˜ ë°ì´í„°ê°€ ìˆëŠ”ì§€ ê³„ì‚°
+//ÆÄÀÏ¿¡ ¸î°³ÀÇ µ¥ÀÌÅÍ°¡ ÀÖ´ÂÁö °è»ê
 int datanum(FILE* fp) {
 	int filesize;
 	int n;
@@ -80,33 +80,6 @@ void loadFiles(void) {
 }
 
 
-int mainmenu(void) {
-	int menunum;
-	
-	printf("***MAIN MENU***\n\n");
-	printf("<1> Select User\n");
-	printf("<2> Stastics\n");
-	printf("<3> View User Records\n");
-	printf("<4> About\n");
-	printf("<5> Quit\n");
-	printf("Enter the choice : ");
-	
-	scanf("%d", &menunum);
-	
-	switch (menunum){
-		case 1 : userSelectMenu();
-			break;
-		case 2 :
-			break;
-		case 3 :
-			break;
-		case 4:
-			break;
-		case 5 : 
-			break;
-	}
-	
-}
 
 int listUser(void) {
 	
@@ -134,12 +107,13 @@ int listUser(void) {
 }
 
 int userSelectMenu(void) {
-	
+	return 0;
 }
 
+
 void createUser(void) {
-	
-	
+
+
 	printf("=========================== \n");
 	printf("  ADD A NEW USER \n");
 	printf("Name :");
@@ -155,8 +129,8 @@ void createUser(void) {
 	printf("=========================== \n");
 	nusers++;
 	cu.usernum = nusers;
-	fseek(userlist, 0, SEEK_END); 
-	fwrite(&cu, sizeof(user), 1, userlist);// íŒŒì¼ì— dataìœ„ì¹˜ì˜ ë°ì´íƒ€ size *nê°œ ì“°ê¸°
+	fseek(userlist, 0, SEEK_END);
+	fwrite(&cu, sizeof(user), 1, userlist);// ÆÄÀÏ¿¡ dataÀ§Ä¡ÀÇ µ¥ÀÌÅ¸ size *n°³ ¾²±â
 
 	//printf(userfilename, "%s.dat", cu.name);
 	//fuser = fopen(userfilename, "wb");			/*create file*/
@@ -168,15 +142,104 @@ void createUser(void) {
 
 
 
+
+
 int listLesson(void) {
+	lesson l1, l2, l3;
+	int n;
+	int option;
+	char filename[12];
+	/*open the lesson list file and list them all*/
+	fllist = fopen("lessonlist.dat", "rb");
+	fread(&n, sizeof(int), 1, fllist);
+	printf("\nnumber of lesson: %d", n);/*3 lessons only*/
+	fread(&l1, sizeof(lesson), 1, fllist);	/*read*/
+	printf("\n(1) %.8s %ld characters", l1.title, l1.length);
+	fread(&l2, sizeof(lesson), 1, fllist);	/*read*/
+	printf("\n(2) %.8s %ld characters", l2.title, l2.length);
+	fread(&l3, sizeof(lesson), 1, fllist);	/*read*/
+	/*now allow the use to select correct user name from the list*/
+	
 
 }
+
+	
 void Session() {
-	//ì§ì ‘ ì†ë„ ê³„ì‚°í•˜ëŠ” íƒ€ìì—°ìŠµ êµ¬í˜„í•˜ëŠ”ë¶€ë¶„ì¸ê±°ê°™ìŒ
+		
+		//Á÷Á¢ ¼Óµµ °è»êÇÏ´Â Å¸ÀÚ¿¬½À ±¸ÇöÇÏ´ÂºÎºĞÀÎ°Å°°À½
+		
+	int i, j;
+	int total = 0, wrong_count = 0;
+ 	time_t tStart, tEnd;
+	double elapsed_time, accuracy; 
+	char input[100];
+	char text[5][100] = {
+ };
+ 
+ 	printf("start!!\n");
+ 
+	time(&tStart);
+ 
+	for(i = 0; i < 5; i++){
+		puts(text[i]); 
+		gets(input);
+
+		total += strlen(text[i]);
+	
+		for(j = 0; j < (int)strlen(text[i]); j++){
+			if(input[j]){
+  			  if(input[j] != text[i][j])
+				wrong_count++;
+				}
+			else{
+			wrong_count += (strlen(text[i]) - j);
+			break;
+			}
+		}
+ 	}
+ 	time(&tEnd);
+ 
+	accuracy = (float)(total - wrong_count) / (float)total * 100;
+	elapsed_time = difftime(tEnd, tStart);
+	printf("\n elapse time : %0.0lf\n accuracy %3.2f%\n", elapsed_time, accuracy);
+	 
+}
+
+int mainmenu(void) {
+	int menunum;
+	while (1)
+	{
+		printf("***MAIN MENU***\n\n");
+		printf("<1> Select User\n");
+		printf("<2> Stastics\n");
+		printf("<3> View User Records\n");
+		printf("<4> About\n");
+		printf("<5> Quit\n");
+		printf("Enter the choice : ");
+
+		scanf("%d", &menunum);
+
+		switch (menunum) {
+		case 1: createUser();
+			loadFiles();
+			userSelectMenu();
+			break;
+		case 2: listUser();
+			break;
+		case 3: listLesson();
+			break;
+		case 4: printf("\n\n¸Å¿ì ¾î·Á¿î °úÁ¦¿´½À´Ï´Ù. ±×·¡µµ ¼ö°íÇÑ ÆÀ¿ø¿¡°Ô ¹Ú¼ö¸¦ º¸³À´Ï´Ù.\n\n");
+			break;
+		}
+		if (menunum == 5) {
+			printf("\n\n Áú¹® ÀÖÀ¸½Ç±î¿ä? \n ÀÌ»ó ¸¶Ä¡°Ú½À´Ï´Ù.\n\n");
+			break;
+		}
+	}
+
 }
 
 void main() {
-	loadFiles();
-	createUser();
-	listUser();
+	mainmenu();
+	
 }
